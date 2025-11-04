@@ -19,9 +19,9 @@
       crossorigin="anonymous">
 
     <!-- CSS -->
-    <link rel="stylesheet" href="includes/css/style.css" type="text/css" />
+    <link rel="stylesheet" href="/SHOPVNB/includes/css/styles.css" type="text/css" />
     <!-- File JS riêng -->
-    <script script src="includes/js/js.js"></script>
+    <script script src="includes/js/slider.js"></script>
 </head>
 
 <body>
@@ -29,7 +29,7 @@
     <div class="container d-flex justify-content-between align-items-center py-2">
         <!-- Logo -->
         <a href="index.php" class="d-flex align-items-center text-decoration-none text-dark">
-            <img src="images/logo/logo.png" alt="VNB Shop Logo" style="height:50px;">
+            <img src="/SHOPVNB/images/logo/logo.png" alt="VNB Shop Logo" style="height:50px;">
             <h1 class="h5 ms-2 mb-0"><span class="text-danger">VNB</span> Shop</h1>
         </a>
         <form class="d-none d-md-flex ms-3" action="timkiem.php" method="get" style="flex:1; max-width:400px;">
@@ -41,7 +41,7 @@
        <!-- Khu vực icon bên phải -->
         <div class="d-flex align-items-center">
             <!-- Tài khoản -->
-            <a href="taikhoan.php" class="btn btn-outline-secondary me-2 d-flex align-items-center">
+            <a href="/SHOPVNB/page/signin.php" class="btn btn-outline-secondary me-2 d-flex align-items-center">
                 <i class="bi bi-person"></i>
                 <span class="ms-1 d-none d-md-inline">Tài khoản</span>
             </a>
@@ -65,10 +65,10 @@
         <div class="container">
             <div class="collapse navbar-collapse" id="navbarMenu">
                 <ul class="navbar-nav mx-auto">
-                    <li class="nav-item"><a href="index.php" class="nav-link">Trang chủ</a></li>
+                    <li class="nav-item"><a href="/SHOPVNB/index.php" class="nav-link">Trang chủ</a></li>
 
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Sản phẩm</a>
+                       <a class="nav-link dropdown-toggle" href="/SHOPVNB/product/index.php" data-bs-toggle="dropdown" id="menuSanPham">Sản phẩm</a>
                         <ul class="dropdown-menu">
                             <?php
                             require("connect.php");
@@ -76,7 +76,7 @@
                             $result = mysqli_query($conn, $sql);
                             if ($result && mysqli_num_rows($result) > 0) {
                                 while ($row = mysqli_fetch_assoc($result)) {
-                                    echo '<li><a class="dropdown-item" href="sanpham.php?loai=' . $row['MaLSP'] . '">' . htmlspecialchars($row['TenLSP']) . '</a></li>';
+                                    echo '<li><a class="dropdown-item" href="/SHOPVNB/product/index.php?maloai=' . $row['MaLSP'] . '">' . htmlspecialchars($row['TenLSP']) . '</a></li>';
                                 }
                             } else {
                                 echo '<li><a class="dropdown-item" href="#">Chưa có loại sản phẩm</a></li>';
@@ -87,8 +87,8 @@
                     </li>
 
                     <li class="nav-item"><a href="uudai.php" class="nav-link">Ưu đãi</a></li>
-                    <li class="nav-item"><a href="gioithieu.php" class="nav-link">Giới thiệu</a></li>
-                    <li class="nav-item"><a href="lienhe.php" class="nav-link">Liên hệ</a></li>
+                    <li class="nav-item"><a href="/SHOPVNB/page/about.php" class="nav-link">Giới thiệu</a></li>
+                    <li class="nav-item"><a href="/SHOPVNB/page/contact.php" class="nav-link">Liên hệ</a></li>
                 </ul>
             </div>
         </div>
@@ -119,18 +119,17 @@
                         $result = mysqli_query($conn, $sql);
                         if ($result && mysqli_num_rows($result) > 0) {
                             while ($row = mysqli_fetch_assoc($result)) {
-                                echo '<li><a class="dropdown-item" href="sanpham.php?loai=' . $row['MaLSP'] . '">' . htmlspecialchars($row['TenLSP']) . '</a></li>';
+                                echo '<li><a class="dropdown-item" href="/SHOPVNB/product/index.php?maloai=' . $row['MaLSP'] . '">' . htmlspecialchars($row['TenLSP']) . '</a></li>';
                             }
                         } else {
                             echo '<li><a class="dropdown-item" href="#">Chưa có loại sản phẩm</a></li>';
                         }
-                        mysqli_close($conn);
                         ?>
                     </ul>
                 </li>
                 <li class="nav-item"><a href="uudai.php" class="nav-link">Ưu đãi</a></li>
-                <li class="nav-item"><a href="gioithieu.php" class="nav-link">Giới thiệu</a></li>
-                <li class="nav-item"><a href="lienhe.php" class="nav-link">Liên hệ</a></li>
+                <li class="nav-item"><a href="/SHOPVNB/page/about.php" class="nav-link">Giới thiệu</a></li>
+                <li class="nav-item"><a href="/SHOPVNB/page/contact.php" class="nav-link">Liên hệ</a></li>
             </ul>
         </div>
     </div>
@@ -140,6 +139,16 @@
 <!-- Bootstrap JS Bundle (bắt buộc cho dropdown & toggle hoạt động) -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" 
   integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const menuSanPham = document.getElementById("menuSanPham");
+  menuSanPham.addEventListener("click", function(e) {
+    if (!menuSanPham.classList.contains("show")) {
+      // Nếu chưa mở dropdown, chuyển trang
+      window.location.href = menuSanPham.href;
+    }
+  });
+});
+</script>
 </body>
 </html>
