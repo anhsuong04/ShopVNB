@@ -17,14 +17,19 @@
       rel="stylesheet" 
       integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" 
       crossorigin="anonymous">
-
+      <!-- File JS riêng -->
+    <script script src="/SHOPVNB/includes/js/slider.js"></script>
     <!-- CSS -->
     <link rel="stylesheet" href="/SHOPVNB/includes/css/styles.css" type="text/css" />
-    <!-- File JS riêng -->
-    <script script src="includes/js/slider.js"></script>
+  
 </head>
 
 <body>
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+?>
 <header class="bg-light border-bottom shadow-sm">
     <div class="container d-flex justify-content-between align-items-center py-2">
         <!-- Logo -->
@@ -47,10 +52,18 @@
             </a>
 
             <!-- Giỏ hàng -->
-            <a href="giohang.php" class="btn btn-outline-success me-2 d-flex align-items-center">
+          <a href="/SHOPVNB/cart.php" class="btn btn-outline-success me-2 d-flex align-items-center">
                 <i class="bi bi-cart3"></i>
                 <span class="ms-1 d-none d-md-inline">Giỏ hàng</span>
+                <?php 
+                // Hiển thị số lượng sản phẩm trong giỏ
+                $cartCount = isset($_SESSION['cart']) ? array_sum(array_column($_SESSION['cart'], 'SoLuong')) : 0;
+                if ($cartCount > 0) {
+                    echo '<span class="badge bg-danger ms-1">'.$cartCount.'</span>';
+                }
+                ?>
             </a>
+
 
             <!-- Nút mở menu (3 gạch) -->
             <button class="btn btn-outline-dark d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileMenu">
@@ -86,7 +99,7 @@
                         </ul>
                     </li>
 
-                    <li class="nav-item"><a href="uudai.php" class="nav-link">Ưu đãi</a></li>
+
                     <li class="nav-item"><a href="/SHOPVNB/page/about.php" class="nav-link">Giới thiệu</a></li>
                     <li class="nav-item"><a href="/SHOPVNB/page/contact.php" class="nav-link">Liên hệ</a></li>
                 </ul>

@@ -98,29 +98,31 @@ $result = $conn->query($sql);
 
         <div class="row g-4">
                     <?php
-                    if ($result && $result->num_rows > 0) {
-                        while ($row = $result->fetch_assoc()) {
-                            echo '<div class="col-6 col-md-4 col-lg-4">
-                                    <div class="card h-100 shadow-sm">
-                                        <img src="../images/products/' . htmlspecialchars($row['HinhAnh']) . '" class="card-img-top" alt="' . htmlspecialchars($row['TenSP']) . '">
-                                        <div class="card-body text-center">
-                                            <h6 class="card-title">' . htmlspecialchars($row['TenSP']) . '</h6>
-                                            <div class="d-flex justify-content-center gap-2">
-                                                <p class="fw-semibold text-decoration-line-through mb-0">' . number_format($row['GiaGoc'],0,',','.') . ' đ</p>
-                                                <p class="text-danger fw-semibold mb-0">' . number_format($row['GiaGiam'],0,',','.') . ' đ</p>
-                                            </div>
-                                            <div class="d-flex justify-content-between gap-2 mt-2">
-                                                <a href="chitiet.php?id=' . $row['MaSP'] . '" class="btn btn-outline-danger btn-sm flex-fill text-nowrap">Xem chi tiết</a>
-                                                <a href="giohang.php?action=add&id=' . $row['MaSP'] . '" class="btn btn-outline-success btn-sm flex-fill text-nowrap">Thêm vào giỏ hàng</a>
-                                            </div>
+                        if ($result && $result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()):
+                        ?>
+                            <div class="col-6 col-md-4 col-lg-4">
+                                <div class="card h-100 shadow-sm">
+                                    <img src="../images/products/<?php echo htmlspecialchars($row['HinhAnh']); ?>" class="card-img-top" alt="<?php echo htmlspecialchars($row['TenSP']); ?>">
+                                    <div class="card-body text-center">
+                                        <h6 class="card-title"><?php echo htmlspecialchars($row['TenSP']); ?></h6>
+                                        <div class="d-flex justify-content-center gap-2">
+                                            <p class="fw-semibold text-decoration-line-through mb-0"><?php echo number_format($row['GiaGoc'],0,',','.'); ?> đ</p>
+                                            <p class="text-danger fw-semibold mb-0"><?php echo number_format($row['GiaGiam'],0,',','.'); ?> đ</p>
+                                        </div>
+                                        <div class="d-flex justify-content-between gap-2 mt-2">
+                                            <a href="/SHOPVNB/product/detail.php?MaSP=<?php echo $row['MaSP']; ?>" class="btn btn-outline-danger btn-sm flex-fill text-nowrap">Xem chi tiết</a>
                                         </div>
                                     </div>
-                                </div>';
-                        }
+                                </div>
+                            </div>
+                        <?php
+                        endwhile;
                     } else {
                         echo '<p class="text-center text-muted">Không có sản phẩm nào.</p>';
                     }
                     ?>
+
                 </div>
 
                 <!-- PHÂN TRANG -->

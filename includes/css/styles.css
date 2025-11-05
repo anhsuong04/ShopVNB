@@ -542,6 +542,47 @@ header .logo h1 {
     color: #ffffff;
     border-color: #ff0000;
 }
+.uu-dai-box {
+  display: inline-block; 
+  background-color: #fffaf5;
+  border: 1px dashed #f08080 !important;;
+  line-height: 1.8;
+  padding: 20px 25px;
+  border-radius: 12px;
+  max-width: 600px;
+}
+
+.uu-dai-box ul li {
+  margin-bottom: 6px;
+  font-size: 15px;
+  white-space: normal; 
+}
+
+.uu-dai-box i {
+  vertical-align: middle;
+}
+.carousel-item .card img {
+  height: 200px;
+  object-fit: cover;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-color: rgba(0, 0, 0, 0.4);
+  border-radius: 50%;
+  padding: 10px;
+}
+.btn-size {
+  min-width: 45px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+}
+
+.btn-size.active {
+  background-color: #dc3545;
+  color: white;
+  border-color: #dc3545;
+}
 
 /* ==== FOOTER ==== */
 footer {

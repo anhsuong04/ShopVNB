@@ -119,7 +119,7 @@ include('includes/connect.php');
                   <h3>{$row['TenSP']}</h3>
                   <p class='price'>".number_format($row['GiaGoc'],0,',','.')."₫</p>
                   <p class='pricesale'>".number_format($row['GiaGiam'],0,',','.')."₫</p>
-                  <a href='chitiet.php?masp={$row['MaSP']}' class='btn'>Xem chi tiết</a>
+                  <a href='/SHOPVNB/product/detail.php?MaSP={$row['MaSP']}' class='btn'>Xem chi tiết</a>
                 </div>
               </div>
             </div>";
