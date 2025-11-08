@@ -21,6 +21,10 @@ if (!$result || $result->num_rows == 0) {
 }
 
 $sp = $result->fetch_assoc();
+$MaSP = $sp['MaSP'];
+$result_sl = $conn->query("SELECT SUM(SoLuong) AS TongSL FROM SanPham_KichCo WHERE MaSP='$MaSP'");
+$row_sl = $result_sl->fetch_assoc();
+$tongSoLuong = $row_sl['TongSL'] ?? 0;
 ?>
 
 <link rel="stylesheet" href="/SHOPVNB/includes/css/styles.css?v=<?php echo time(); ?>" type="text/css">
@@ -44,8 +48,8 @@ $sp = $result->fetch_assoc();
                 <p><strong>Mã: </strong><span class="text-danger"><?php echo htmlspecialchars($sp['MaSP']); ?></span></p>
                 <p><strong>Thương hiệu: </strong> <span class="text-danger"><?php echo htmlspecialchars($sp['TenNCC']); ?></span> ||
                 <strong>Tình trạng: </strong>
-                    <?php echo $sp['SoLuong'] > 0 ? '<span class="text-danger">Còn hàng</span>' : '<span class="text-danger">Hết hàng</span>'; ?>
-                </p>
+                    <?php echo $tongSoLuong > 0 ? '<span class="text-success">Còn hàng</span>' : '<span class="text-danger">Hết hàng</span>'; ?>
+
 
                 <div class="d-flex align-items-center gap-3 my-3">
                     <span class="fs-5 text-danger fw-bold">
@@ -80,51 +84,58 @@ $sp = $result->fetch_assoc();
                         <li><i class="bi bi-check2-square text-success me-2"></i> Voucher giảm giá cho lần sau</li>
                     </ul>
                 </div>
-                <div class="mt-3">
-                    <label class="fw-semibold"></label>
-                    <div class="d-flex flex-wrap gap-2">
-                        <?php
-                        $sql_size = "
-                            SELECT kc.MaSize, kc.TenSize
-                            FROM SanPham_KichCo spk
-                            JOIN KichCo kc ON spk.MaSize = kc.MaSize
-                            WHERE spk.MaSP = '" . $conn->real_escape_string($sp['MaSP']) . "'
-                            AND spk.SoLuong > 0
-                        ";
-                        $rs_size = $conn->query($sql_size);
-
-                        if ($rs_size && $rs_size->num_rows > 0) {
-                            while ($sz = $rs_size->fetch_assoc()) {
-                                echo '
-                                <button type="button" class="btn btn-outline-danger btn-size" 
-                                    data-size="'.$sz['MaSize'].'">'.$sz['TenSize'].'</button>';
-                            }
-                        } 
-                        ?>
-                    </div>
-                    <input type="hidden" name="selectedSize" id="selectedSize">
-                    </div>
-                <!-- Chọn số lượng -->
-                <div class="d-flex align-items-center gap-2 mt-3">
-                    <label for="soluong" class="fw-semibold">Số lượng:</label>
-                    <div class="input-group" style="width:130px;">
-                        <button type="button" class="btn btn-outline-danger" id="minusBtn">-</button>
-                        <input type="number" name="soluong" id="soluong" value="1" min="1" max="<?php echo $sp['SoLuong']; ?>" class="form-control text-center">
-                        <button type="button" class="btn btn-outline-danger" id="plusBtn">+</button>
-                    </div>
-                </div>
-
-                <!-- Nút hành động -->
-                <div class="d-flex gap-2 mt-5 flex-wrap">
-                  <form method="POST" action="../cart.php">
+                <form method="POST" action="/ShopVNB/cart.php" id="productForm">
+                    <input type="hidden" name="action" value="add">
                     <input type="hidden" name="MaSP" value="<?php echo $sp['MaSP']; ?>">
-                    <input type="hidden" name="selectedSize" id="selectedSize">
+                    <input type="hidden" name="selectedSize" id="selectedSize" value="">
                     <input type="hidden" name="soluong" id="soluongInput" value="1">
-                    <button type="submit" class="btn btn-success" id="addToCartBtn">Thêm vào giỏ hàng</button>
-             
+
+                    <!-- Chọn size -->
+                    <div class="mt-3">
+                        <label class="fw-semibold">Kích cỡ:</label>
+                        <div class="d-flex flex-wrap gap-2">
+                            <?php
+                                                        
+                                $sql_size = "
+                                    SELECT spk.MaSize, kc.TenSize, spk.SoLuong
+                                    FROM SanPham_KichCo spk
+                                    JOIN KichCo kc ON spk.MaSize = kc.MaSize
+                                    WHERE spk.MaSP = '" . $conn->real_escape_string($sp['MaSP']) . "'
+                                    AND spk.SoLuong > 0
+                                ";
+                                $rs_size = $conn->query($sql_size);
+
+                                if ($rs_size && $rs_size->num_rows > 0) {
+                                    while ($sz = $rs_size->fetch_assoc()) {
+                                        echo '
+                                        <button type="button" class="btn btn-outline-danger btn-size" 
+                                            data-size="'.$sz['MaSize'].'" data-qty="'.$sz['SoLuong'].'">'.$sz['TenSize'].'</button>';
+                                    }
+                                }
+                                ?>
+
+                          
+                        </div>
+                    </div>
+
+                    <!-- Chọn số lượng -->
+                    <div class="d-flex align-items-center gap-2 mt-3">
+                        <label for="soluong" class="fw-semibold">Số lượng:</label>
+                        <div class="input-group" style="width:130px;">
+                            <button type="button" class="btn btn-outline-danger" id="minusBtn">-</button>
+                           <input type="number" name="soluong_display" id="soluong" value="1" 
+                             min="1" max="<?php echo $tongSoLuong; ?>" class="form-control text-center">
+                            <button type="button" class="btn btn-outline-danger" id="plusBtn">+</button>
+                        </div>
+                    </div>
+
+                    <!-- Nút thêm -->
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-success w-20">Thêm vào giỏ hàng</button>
+                    </div>
+ 
                 </form>
 
-                </div>
             </div>
         </div>
 
@@ -192,17 +203,80 @@ $sp = $result->fetch_assoc();
 
     </div>
 </div>
-
 <script>
-document.getElementById('plusBtn').addEventListener('click', function() {
-    let input = document.getElementById('soluong');
-    if (parseInt(input.value) < parseInt(input.max)) input.value++;
-});
-document.getElementById('minusBtn').addEventListener('click', function() {
-    let input = document.getElementById('soluong');
-    if (parseInt(input.value) > parseInt(input.min)) input.value--;
-});
-</script>
+const form = document.getElementById('productForm');
+const input = document.getElementById('soluong');
+const selectedSizeInput = document.getElementById('selectedSize');
 
+// chọn size và cập nhật max số lượng
+document.querySelectorAll('.btn-size').forEach(btn => {
+    btn.addEventListener('click', function() {
+        document.querySelectorAll('.btn-size').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        selectedSizeInput.value = this.dataset.size;
+
+        // update max số lượng theo size
+        const maxQty = parseInt(this.dataset.qty);
+        input.max = maxQty;
+        if (parseInt(input.value) > maxQty) input.value = maxQty;
+        document.getElementById('soluongInput').value = input.value;
+    });
+});
+
+// tăng giảm số lượng
+document.getElementById('plusBtn').addEventListener('click', () => {
+    if (parseInt(input.value) < parseInt(input.max)) input.value++;
+    document.getElementById('soluongInput').value = input.value;
+});
+document.getElementById('minusBtn').addEventListener('click', () => {
+    if (parseInt(input.value) > parseInt(input.min)) input.value--;
+    document.getElementById('soluongInput').value = input.value;
+});
+input.addEventListener('input', () => {
+    // kiểm tra nếu nhập vượt max
+    if (parseInt(input.value) > parseInt(input.max)) {
+        alert('Số lượng bạn chọn vượt quá tồn kho của size này!');
+        input.value = input.max;
+    }
+    if (parseInt(input.value) < parseInt(input.min)) input.value = input.min;
+    document.getElementById('soluongInput').value = input.value;
+});
+
+// kiểm tra trước khi submit
+form.addEventListener('submit', function(e) {
+    const sizeButtons = document.querySelectorAll('.btn-size');
+
+    if (sizeButtons.length === 0) {
+        selectedSizeInput.value = "-";
+        return true;
+    }
+
+    if (!selectedSizeInput.value || selectedSizeInput.value.trim() === "") {
+        e.preventDefault();
+        alert('Vui lòng chọn size trước khi thêm vào giỏ hàng!');
+        return false;
+    }
+
+    if (parseInt(input.value) > parseInt(input.max)) {
+        e.preventDefault();
+        alert('Số lượng bạn chọn vượt quá tồn kho của size này!');
+        return false;
+    }
+});
+document.querySelectorAll('.btn-size').forEach(btn => {
+    btn.addEventListener('click', function() {
+        document.querySelectorAll('.btn-size').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        selectedSizeInput.value = this.dataset.size;
+
+        // cập nhật max số lượng theo tồn kho size
+        const maxQty = parseInt(this.dataset.qty);
+        input.max = maxQty;
+        if (parseInt(input.value) > maxQty) input.value = maxQty;
+        document.getElementById('soluongInput').value = input.value;
+    });
+});
+
+</script>
 
 <?php require('../includes/footer.html'); ?>

@@ -1,0 +1,189 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #f8f9fa;
+    font-family: Arial, sans-serif;
+    display: flex;
+}
+
+.sidebar {
+    width: 240px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: #000;
+    color: white;
+    padding-top: 20px;
+}
+
+.sidebar a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    padding: 10px 20px;
+    border-radius: 10px;
+    margin: 5px 10px;
+    transition: background 0.2s;
+}
+
+.sidebar a:hover,
+.sidebar a.active {
+    background: #e63946;
+}
+
+.content {
+    margin-left: 260px;
+    padding: 10px 20px;
+    flex-grow: 1;
+    max-width: calc(100% - 260px);
+    overflow-x: auto;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #e63946;
+    padding: 10px 20px;
+    border-radius: 8px;
+    color: white;
+    margin-bottom: 30px;
+}
+
+h2 {
+    text-align: center;
+    color: #000;
+    margin-bottom: 25px;
+    text-transform: uppercase;
+}
+
+form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+input[type="text"] {
+    padding: 8px 12px;
+    width: 250px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+input[type="text"]:focus {
+    border-color: #e63946;
+    outline: none;
+    box-shadow: 0 0 4px rgba(230, 57, 70, 0.4);
+}
+
+button,
+a.button {
+    background-color: #e63946;
+    color: #fff;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+button:hover,
+a.button:hover {
+    background-color: #b3001b;
+}
+
+table {
+    width: 95%;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0 0 8px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+th, td {
+    padding: 10px 10px;
+    text-align: center;
+    border-bottom: 1px solid #e1e1e1;
+    font-size: 14px;
+}
+
+th {
+    background-color: #000;
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 14px;
+}
+
+tr:hover {
+    background-color: #fceaea;
+}
+
+td img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+td form {
+    display: inline;
+}
+
+td button {
+    background-color: #000;
+    padding: 6px 5px;
+    border-radius: 5px;
+    font-size: 13px;
+    margin: 2px;
+    color: white;
+}
+
+td button:hover {
+    background-color: #333;
+}
+
+td form[action="delete.php"] button {
+    background-color: #e63946;
+}
+
+td form[action="delete.php"] button:hover {
+    background-color: #b3001b;
+}
+.pagination {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.pagination a, .pagination b {
+    display: inline-block;
+    margin: 0 3px;
+    padding: 5px 10px;
+    text-decoration: none;
+    border: 1px solid #ff0000;
+    border-radius: 5px;
+    color: #fe0505;
+    background-color: #f9f9f9;
+    font-weight: bold;
+}
+
+.pagination a:hover {
+    background-color: #ff0000;
+    color: white;
+}
+
+.pagination b {
+    background-color: #f50505;
+    color: white;
+    border-color: #f80505;
+}

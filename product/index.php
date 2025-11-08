@@ -9,6 +9,11 @@ $limit = 6; // số sản phẩm trên mỗi trang
 $page = isset($_GET['page']) && $_GET['page'] > 0 ? intval($_GET['page']) : 1;
 $offset = ($page - 1) * $limit;
 $where = [];
+// TÌM KIẾM THEO TÊN SẢN PHẨM
+if (!empty($_GET['q'])) {
+    $keyword = $conn->real_escape_string($_GET['q']);
+    $where[] = "TenSP LIKE '%$keyword%'";
+}
 
 if (isset($_GET['gia'])) {
     switch ($_GET['gia']) {
@@ -63,17 +68,20 @@ $result = $conn->query($sql);
     <div class="col-md-9">
         <div class="d-flex align-items-center justify-content-between mb-4">
     <h3 class="text-uppercase text-dark mb-0">
-        <?php
-        if (!empty($maloai)) {
-            $maloai_sql = $conn->real_escape_string($maloai);
-            $queryLoai = $conn->query("SELECT TenLSP FROM LoaiSanPham WHERE MaLSP = '$maloai_sql'");
-            $tenLoai = ($queryLoai && $queryLoai->num_rows > 0) ? $queryLoai->fetch_assoc()['TenLSP'] : '';
-            echo htmlspecialchars($tenLoai);
-        } else {
-            echo "Tất cả sản phẩm";
-        }
-        ?>
-    </h3>
+<?php
+if (!empty($_GET['q'])) {
+    echo 'Kết quả tìm kiếm cho: "' . htmlspecialchars($_GET['q']) . '"';
+} elseif (!empty($maloai)) {
+    $maloai_sql = $conn->real_escape_string($maloai);
+    $queryLoai = $conn->query("SELECT TenLSP FROM LoaiSanPham WHERE MaLSP = '$maloai_sql'");
+    $tenLoai = ($queryLoai && $queryLoai->num_rows > 0) ? $queryLoai->fetch_assoc()['TenLSP'] : '';
+    echo htmlspecialchars($tenLoai);
+} else {
+    echo "Tất cả sản phẩm";
+}
+?>
+</h3>
+
     <form method="GET" id="sortForm">
         <?php
         foreach ($_GET as $key => $val) {
